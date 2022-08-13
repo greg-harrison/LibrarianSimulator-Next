@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "next lint",
     "test:unit": "jest",
     "test:lint": "tsc && eslint . --ext .tsx --ext .ts"
@@ -14,9 +14,11 @@
     "@emotion/react": "11.9.3",
     "@emotion/styled": "11.9.3",
     "@mui/material": "5.9.0",
+    "got": "12.3.1",
     "next": "12.2.2",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "sqlite": "4.1.2"
   },
   "devDependencies": {
     "@types/node": "18.0.6",
