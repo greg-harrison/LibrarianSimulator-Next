@@ -4,7 +4,13 @@ class BookSearchService {
     async query (): Promise<unknown>  {
         const requestUrl = `http://localhost:3000/graphql`
         const query = {
-            query: `# Write your query or mutation here\nquery GetBooks{\n    books{\n      title\n      subtitle\n    }\n}`
+            query: `query GetBooks {
+                books {
+                    title
+                    description
+                    subtitle
+                }
+            }`
         }
         // use got to perform a POST to the database
         return got.post(requestUrl, {
