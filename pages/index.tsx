@@ -1,50 +1,57 @@
 import type { NextPage } from 'next'
+import got, { RequestError } from 'got'
 import { useEffect, useState } from 'react'
 import MenuAppBar from '../components/MenuAppBar'
 
-const Home: NextPage = () => {
+const Home: NextPage = ({ data }) => {
 
-  const [ isLoading, setIsLoading ] = useState(true)
-  const [ books, setBooks ] = useState<Array<any>>([])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch('/api/getBooks')
-      if (response.status !== 200) {
-        setIsLoading(false)
-        return
-      }
-      const responseData = await response.json()
-      setBooks(responseData.books)
-      setIsLoading(false)
-    }
-
-    console.log(books)
-
-    setIsLoading(true)
-    void fetchData()
-  })
+  const books = data.data.books
 
   return (
     <main>
       < MenuAppBar />
       {/* Filter */}
 
-      {/* { !isLoading && 
-        <>
-          { books.map((book) => {
-            return (
-              <>
-                {book.title}
-              </>
-            ) 
-          })}
-        </> } */}
+      <>
+        { books.map((book) => {
+          return (
+            <>
+              {book.title}
+            </>
+          ) 
+        })}
+      </>
       {/* Display the items here */}
     </main>
   )
 }
 
 // GetServerSideProps Here
+export async function getServerSideProps() {
+  const requestUrl = `http://localhost:3000/graphql`
+  const query = {
+    query: `query GetBooks {
+      books {
+        title
+        description
+        subtitle
+      }
+    }`
+  }
+  // use got to perform a POST to the database
+  return got.post(requestUrl, {
+    responseType: 'json',
+    json: query
+  }).then((result) => {
+    const { errors } = result.body as Record<string, string>
+    if (errors) {
+      console.log('BookSearchService - Post failed w error: ', JSON.stringify(errors))
+    }
+    return { props: { data: result.body } }
+  }).catch((error: RequestError) => {
+    console.log('BookSearchService - Major Error w query:', error.message)
+    return { props: { data: { error } } }
+  }) 
+}
 
 export default Home
