@@ -23,23 +23,23 @@ const Home: NextPage = () => {
 
     setIsLoading(true)
     void fetchData()
-  })
+  }, [])
 
   return (
     <main>
       < MenuAppBar />
       {/* Filter */}
 
-      {/* { !isLoading && 
+      { !isLoading && 
         <>
-          { books.map((book) => {
+          { books.books.map((book) => {
             return (
               <>
                 {book.title}
               </>
             ) 
           })}
-        </> } */}
+        </> }
       {/* Display the items here */}
     </main>
   )
