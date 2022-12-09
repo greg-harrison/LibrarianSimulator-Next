@@ -1,5 +1,5 @@
 export interface IBookSearchResultData {
-  	id: string
+	id: string
 	isbn10: string
 	title: string
 	subtitle: string

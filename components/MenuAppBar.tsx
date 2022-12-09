@@ -2,7 +2,6 @@ import { Box } from '@mui/system'
 import { AppBar, Container, Toolbar, Typography } from '@mui/material'
 import Head from 'next/head'
 
-
 const MenuAppBar = () => {
 	const navHeight = '55px'
 

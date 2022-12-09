@@ -1,10 +1,11 @@
 import type { NextPage } from 'next'
 import got, { RequestError } from 'got'
-import { useEffect, useState } from 'react'
 import MenuAppBar from '../components/MenuAppBar'
 import { BookItem } from '../components/BookItem'
+import { IBookSearchResult } from '../types/book'
 
-const Home: NextPage = ({ data }) => {
+const Home: NextPage = (data: IBookSearchResult) => {
+	const { books } = data.data.data
 
 	const books = data.data.books
 
