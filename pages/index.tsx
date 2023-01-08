@@ -1,52 +1,28 @@
-import type { NextPage } from 'next'
-import got, { RequestError } from 'got'
+import { useEffect, useState } from 'react'
 import MenuAppBar from '../components/MenuAppBar'
 import { BookItem } from '../components/BookItem'
-import { IBookSearchResult } from '../types/book'
+import { IBookSearchResultData } from '../types/book'
 
-const Home: NextPage = (data: IBookSearchResult) => {
-	const { books } = data.data.data
+const Home = (): JSX.Element => {
+	const [ books, setBooks ] = useState([])
 
-	const books = data.data.books
+	useEffect( () => {
+		const fetchData = async () => {
+			const response = await fetch('/api/getBooks?filters=""')
+			const { books } = await response.json() as IBookSearchResultData[]
+			setBooks(books.books)
+		}
+		void fetchData()
+	}, [])
 
 	return (
 		<main>
 			<MenuAppBar />
 			{/* Filter */}
 
-			{ books.map((book) => <BookItem book={book}></BookItem>)}
-
-			{/* Display the items here */}
+			{ books.length > 0 && books.map((book) => <BookItem book={ book } />)}
 		</main>
 	)
-}
-
-// GetServerSideProps Here
-export async function getServerSideProps () {
-	const requestUrl = 'http://localhost:3000/graphql'
-	const query = {
-		query: `query GetBooks {
-      books {
-        title
-        description
-        subtitle
-      }
-    }`
-	}
-	// use got to perform a POST to the database
-	return got.post(requestUrl, {
-		responseType: 'json',
-		json: query
-	}).then((result) => {
-		const { errors } = result.body as Record<string, string>
-		if (errors) {
-			console.log('BookSearchService - Post failed w error: ', JSON.stringify(errors))
-		}
-		return { props: { data: result.body } }
-	}).catch((error: RequestError) => {
-		console.log('BookSearchService - Major Error w query:', error.message)
-		return { props: { data: { error } } }
-	})
 }
 
 export default Home
